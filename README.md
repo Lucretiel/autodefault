@@ -1,4 +1,4 @@
-![Crates.io](https://img.shields.io/crates/v/autodefault) ![Crates.io](https://img.shields.io/crates/l/autodefault) ![docs.rs](https://img.shields.io/docsrs/autodefault)
+[![Crates.io](https://img.shields.io/crates/v/autodefault)](https://crates.io/crates/autodefault) [![Crates.io](https://img.shields.io/crates/l/autodefault)](https://crates.io/crates/autodefault) [![docs.rs](https://img.shields.io/docsrs/autodefault)](http://docs.rs/autodefault)
 
 # autodefault
 
