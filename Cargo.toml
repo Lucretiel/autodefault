@@ -1,9 +1,22 @@
 [package]
 name = "autodefault"
-version = "0.1.0"
+version = "1.0.0"
 authors = ["Nathan West <Lucretiel@gmail.com>"]
 edition = "2018"
+
+readme = "README.md"
+license = "MPL-2.0"
+description = "A proc macro that automatically inserts `..Default::default()` into your struct literals"
+repository = "https://github.com/Lucretiel/autodefault"
+
+[lib]
+proc-macro = true
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+proc-macro2 = "1.0.24"
+quote = "1.0.9"
+syn = { version = "1.0.65", default-features = false, features = [
+    "full", "parsing", "visit-mut", "printing"
+]}
