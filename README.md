@@ -78,24 +78,4 @@ fn build_outer_simple() -> Outer {
 assert_eq!(build_outer(), build_outer_simple())
 ```
 
-It's never been easier!
-
-# What it's actually doing
-
-When applied to a function, the `#[autodefault]` will scan the body of the function for all struct literals that don't already have a `..rest` trailing initializer and insert a `..Default::default()`. It will do this unconditionally for all struct literals, regardless of whether they actually implement [`Default`], so be sure to refactor into helper functions as necessary:
-
-```rust
-use autodefault::autodefault;
-
-struct NoDefault {
-    x: i32,
-    y: i32,
-    z: i32,
-}
-
-// This will fail to compile
-#[autodefault]
-fn nope() {
-    let _nope = NoDefault { x: 10 };
-}
-```
+It's never been easier! Check out the [reference documentation](http://docs.rs/autodefault) for more details.
