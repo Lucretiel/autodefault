@@ -57,12 +57,7 @@ fn build_outer() -> Outer {
 }
 ```
 
-Wouldn't it be nice if you could omit all the tedious `..Default::default()`
-calls when building deeply nested struct literals? Now you can! With
-`autodefault`, it's never been easier to build up a large struct literal
-for your tests, [bevy](https://bevyengine.org/) components, or anything else
-you might need!. Simply tag any function with the `#[autodefault]` attribute
-and let us handle the rest:
+Wouldn't it be nice if you could omit all the tedious `..Default::default()` calls when building deeply nested struct literals? Now you can! With `autodefault`, it's never been easier to build up a large struct literal for your tests, [bevy](https://bevyengine.org/) components, or anything else you might need!. Simply tag any function with the `#[autodefault]` attribute and let us handle the rest:
 
 ```rust
 use autodefault::autodefault;
@@ -87,11 +82,7 @@ It's never been easier!
 
 # What it's actually doing
 
-When applied to a function, the `#[autodefault]` will scan the body of the
-function for all struct literals that don't already have a `..rest` trailing
-initializer and insert a `..Default::default()`. It will do this unconditionally
-for all struct literals, regardless of whether they actually implement
-[`Default`], so be sure to refactor into helper functions as necessary:
+When applied to a function, the `#[autodefault]` will scan the body of the function for all struct literals that don't already have a `..rest` trailing initializer and insert a `..Default::default()`. It will do this unconditionally for all struct literals, regardless of whether they actually implement [`Default`], so be sure to refactor into helper functions as necessary:
 
 ```rust
 use autodefault::autodefault;
