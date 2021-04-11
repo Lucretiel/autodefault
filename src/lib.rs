@@ -199,7 +199,7 @@ use syn::{
     parse2, parse_quote,
     punctuated::Punctuated,
     visit_mut::{visit_expr_struct_mut, VisitMut},
-    ExprStruct, Ident, Token,
+    ExprStruct, Ident, Item, Token,
 };
 
 #[derive(Debug)]
@@ -277,6 +277,8 @@ impl VisitMut for AutodefaultVisitor {
             }));
         }
     }
+
+    fn visit_item_mut(&mut self, _: &mut Item) {}
 }
 
 fn autodefault_impl(attr: TokenStream2, item: TokenStream2) -> TokenStream2 {
@@ -456,6 +458,36 @@ mod tests {
                     }
                 }
             )
+        )
+    }
+
+    #[test]
+    fn inner_item() {
+        let input = quote! {
+            fn demo () {
+                let x = Foo {a: 10, b: 10};
+
+                fn inner () {
+                    let x = Foo {a: 10, b: 10};
+                }
+            }
+        };
+        let output: TokenStream2 = autodefault_impl(TokenStream2::new(), input);
+
+        assert_eq!(
+            format!("{:?}", output),
+            format!(
+                "{:?}",
+                quote! {
+                    fn demo () {
+                        let x = Foo {a: 10, b: 10, ..::core::default::Default::default()};
+
+                        fn inner () {
+                            let x = Foo {a: 10, b: 10};
+                        }
+                    }
+                }
+            ),
         )
     }
 }
