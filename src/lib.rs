@@ -186,6 +186,35 @@ fn example2() {
     let _data = NoDefault2 { a: NoDefault1 { a: HasDefault {} } };
 }
 ```
+
+# Other behaviors
+
+`autodefault` will not descend into nested item definitions; if you nest an
+`fn` item inside another `fn`, you'll need to tag the inner function with
+`autodefault` again.
+
+```
+use autodefault::autodefault;
+
+#[derive(Default)]
+struct HasDefault {
+    x: i32
+}
+
+struct NoDefault {
+    x: i32
+}
+
+#[autodefault]
+fn outer() {
+    let _x = HasDefault {};
+
+    fn inner() {
+        let _x = NoDefault {x: 10};
+    }
+}
+```
+
 */
 
 use std::collections::HashSet;
@@ -264,13 +293,15 @@ impl VisitMut for AutodefaultVisitor {
             _ => {}
         }
 
-        // Make sure fields have trailing comma
-        if !struct_expr.fields.empty_or_trailing() {
-            struct_expr.fields.push_punct(parse_quote! {,});
-        }
-
-        // Add `..Default::default()`
+        // Add `..Default::default()` to structs that don't have a ..rest
+        // initializer
         if struct_expr.dot2_token.is_none() && struct_expr.rest.is_none() {
+            // Make sure fields have trailing comma
+            if !struct_expr.fields.empty_or_trailing() {
+                struct_expr.fields.push_punct(parse_quote! {,});
+            }
+
+            // Add the ..Default::default()
             struct_expr.dot2_token = Some(parse_quote! {..});
             struct_expr.rest = Some(Box::new(parse_quote! {
                 ::core::default::Default::default()
